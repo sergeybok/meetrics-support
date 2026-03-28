@@ -43,7 +43,7 @@ Each FRED file has exactly two columns — the date and the series value. Nothin
 
 ![SCREENSHOT: CSV import preview for FEDFUNDS, showing observation_date as the timestamp and FEDFUNDS as the single selected tag, with a sample of rows from the 1950s-60s](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/IMG_F6F4AA34C056-1.jpeg?raw=true)
 
-After two imports, your Feed will contain both tags. Combined, you have roughly 1,600 monthly observations — every interest rate decision and every unemployment reading since the Eisenhower administration.
+After two imports, your Feed will contain both tags. Combined, you have roughly 1,700 monthly observations — every interest rate decision and every unemployment reading since the Eisenhower administration.
 
 ![SCREENSHOT: Feed screen showing recent entries for both fedfunds and unrate, with current values visible alongside recent historical readings](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202026-03-27%20at%2021.10.43.png?raw=true)
 
@@ -71,17 +71,15 @@ The unemployment chart looks like a seismograph. The tall spikes are recessions 
 
 The Fed doesn't raise rates and immediately throw people out of work. The economy isn't that responsive. What happens is a chain: higher rates raise borrowing costs, which slow business investment and consumer spending, which reduces demand for labour, which eventually shows up in the unemployment numbers. This takes time.
 
-Navigate to **Correlate**. Set Tag A to `fedfunds`, Tag B to `unrate`, range to **All**, bucket to **1D**.
+Navigate to **Correlate**. Set Tag A to `fedfunds`, Tag B to `unrate`, range to **All**, bucket to **1 Month**.
 
-At **lag 0**, the correlation will likely be positive — around r = 0.3 to 0.4. This looks paradoxical. Shouldn't higher rates mean higher unemployment? But remember: the Fed also *cuts* rates when unemployment is already high. So in the raw contemporaneous data, high unemployment and high rates appear together (late-cycle tightening), and low unemployment and low rates appear together (accommodative post-crisis policy). The cause and effect are tangled.
-
-![SCREENSHOT: Correlate view with fedfunds → unrate at lag 0, showing a moderate positive correlation around r = 0.3-0.4]
+At **lag 0**, the correlation is around 0. This looks paradoxical. Shouldn't higher rates mean higher unemployment? But remember: the Fed also *cuts* rates when unemployment is already high. So in the raw contemporaneous data, high unemployment and high rates appear together (late-cycle tightening), and low unemployment and low rates appear together (accommodative post-crisis policy). The cause and effect are tangled.
 
 Now step the lag forward using the **+** control. This is where it gets interesting.
 
-As you move through lags 6 through 18, watch the correlation coefficient. It will start declining. Around **lag +12 to +18**, it typically reaches its most negative point — meaning the Fed's rate at time *t* is most strongly associated with unemployment approximately 12 to 18 months later. The sign flip to negative is the key: higher rates today predict *higher* unemployment next year.
+As you move through lags 6 through 18, watch the correlation coefficient. It will start increasing. Around **lag +12 to +18**, it typically reaches its highest point — meaning the Fed's rate at time *t* is most strongly associated with unemployment approximately 12 to 18 months later. Conclusion: higher rates today predict *higher* unemployment next year.
 
-![SCREENSHOT: Correlate view with fedfunds → unrate at lag around +14, showing the correlation has moved into negative territory, with the lag label reading "fedfunds leads unrate by 14d"]
+![SCREENSHOT: Correlate view with fedfunds → unrate at different lags"](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/combined.png?raw=true)
 
 Twelve to eighteen months. That's how long it takes for a rate hike to show up as jobs lost. This lag is one of the most consistent empirical findings in monetary economics — it appears in academic research going back to Friedman's 1961 paper on the lag in monetary policy effects, and you're reproducing it from a phone with two public datasets and a cross-correlation function.
 
@@ -97,7 +95,7 @@ Narrow both the range and context to the early 1980s in Analytics. Paul Volcker 
 
 In the Correlate view, isolate **1979–1984** and step through lags on `fedfunds` → `unrate`. The relationship is brutal and clean: unemployment rose from around 6% in 1979 to 10.8% in December 1982 — the highest level since the Great Depression. About 3 million people lost their jobs. Volcker's policy worked — inflation collapsed — but the human cost was enormous and the lag between cause and effect was textbook: roughly 12 to 15 months from the peak in rates to the peak in unemployment.
 
-![SCREENSHOT: TagChartView for unrate narrowed to 1979-1984, showing the dramatic rise to 10.8% and the chart for fedfunds on the All view with the 1981 spike clearly visible as the preceding cause]
+![SCREENSHOT: TagChartView for unrate narrowed to 1979-1984, showing the dramatic rise to 10.8% and the chart for fedfunds on the All view with the 1981 spike clearly visible as the preceding cause](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator4.png?raw=true)
 
 **The Greenspan Hikes (1994–1995)**
 
@@ -105,7 +103,7 @@ This one is the exception that proves the rule. Alan Greenspan raised rates from
 
 Narrow to **1994–1997**. The unemployment rate kept *falling* throughout the tightening cycle. No recession followed. This is the famous soft landing — the one time in the modern era when the Fed raised rates and the labour market shrugged. Economists have debated why ever since. Luck, timing, the unique productivity boom of the early internet era, global disinflationary tailwinds — all have been proposed. The data is silent on the mechanism. It just shows the anomaly.
 
-![SCREENSHOT: Correlate view with fedfunds → unrate narrowed to 1994-1997, showing a weak or positive correlation — unusually, higher rates did not predict rising unemployment during this cycle]
+![SCREENSHOT: Correlate view with fedfunds → unrate narrowed to 1994-1997, showing a weak or positive correlation — unusually, higher rates did not predict rising unemployment during this cycle](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator5.png?raw=true)
 
 **The 2004–2006 Cycle and What Followed**
 
@@ -113,7 +111,7 @@ Narrow to **2004–2009**. The Fed raised rates seventeen times over two years, 
 
 It wasn't. The lag was just longer. The rate hikes had inflated a credit bubble in housing markets — the mechanism was not direct labour market suppression but financial system stress. When the bubble burst, unemployment didn't just rise. It nearly doubled in 18 months, from 4.4% in May 2007 to 9.9% in November 2009. The lag between the tightening and the unemployment damage was unusually long — almost three years — because the channel ran through finance rather than directly through business investment. But it arrived.
 
-![SCREENSHOT: TagChartView for unrate narrowed to 2004-2010, showing the deceptively flat unemployment from 2004-2007 followed by the rapid rise to nearly 10% — illustrating how the delayed lag from the 2004-2006 rate hikes eventually materialized]
+![SCREENSHOT: TagChartView for unrate narrowed to 2004-2010, showing the deceptively flat unemployment from 2004-2007 followed by the rapid rise to nearly 10% — illustrating how the delayed lag from the 2004-2006 rate hikes eventually materialized](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator6.png?raw=true)
 
 ---
 
@@ -121,43 +119,18 @@ It wasn't. The lag was just longer. The rate hikes had inflated a credit bubble 
 
 Now look at the most recent cycle.
 
-Tap `fedfunds` in Analytics. Set to **2Y**. The chart shows eleven rate hikes in sixteen months — from 0.08% in February 2022 to 5.33% by July 2023. In raw speed and magnitude, this is the most aggressive tightening since Volcker. The Fed moved faster than it had in four decades.
+Set to **2022-2024**. The chart shows eleven rate hikes in sixteen months — from 0.08% in February 2022 to 5.33% by July 2023. In raw speed and magnitude, this is the most aggressive tightening since Volcker. The Fed moved faster than it had in four decades.
 
-![SCREENSHOT: TagChartView for fedfunds with 2Y range, showing the near-vertical rise from near zero in early 2022 to above 5% by mid-2023 — the steepest rate of increase visible in the recent portion of the chart]
-
-Now tap `unrate` and set to the same **2Y** range.
-
-![SCREENSHOT: TagChartView for unrate with 2Y range, showing unemployment staying remarkably flat between approximately 3.4% and 3.9% throughout the 2022-2024 period despite the aggressive rate hikes]
+![SCREENSHOT: TagChartView for fedfunds with 2Y range, showing the near-vertical rise from near zero in early 2022 to above 5% by mid-2023 — the steepest rate of increase visible in the recent portion of the chart](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator7.png?raw=true)
 
 Unemployment barely moved. It started the tightening cycle around 3.8%, dipped to 3.4% at its lowest, and even after the most aggressive rate hike campaign in a generation had fully run its course, remained below 4%. Apply the 12–18 month lag you measured earlier: by late 2023 and into 2024, the unemployment consequences of the 2022 hikes should have been visible. They largely weren't.
 
-Navigate to **Correlate**, set to `fedfunds` → `unrate`, narrow to **2022–present**, and step through lags +6 through +18. The negative correlation that appeared so consistently in prior cycles is weak or absent. Something is different.
+In  the Correlate view set **2022–present** and bucket of **1 Month**, and step through lags +6 through +18. The correlation is quite strong but that is due to low variance in the unemployment rate. If you expand the window to **2021-present** the correlation in the 6 month window disappears.
 
-![SCREENSHOT: Correlate view with fedfunds → unrate narrowed to 2022-present, showing a weak or near-zero correlation at lags +12 to +18, a striking departure from the historical pattern visible in the full-sample analysis]
-
----
-
-## Step 6 — What Did the History Say Should Happen?
-
-This is where the AI tools become useful for probing the historical baseline.
-
-Switch to the **Analyst** tab. The daily insights should surface the recent trajectory of `fedfunds` and any anomaly in the `unrate` series relative to historical patterns.
-
-![SCREENSHOT: Analyst tab showing insight cards — a trend card for fedfunds showing the 2022-2023 rise, and a correlation card noting the historical lag relationship between fedfunds and unrate]
-
-The chat interface lets you interrogate the historical record directly. Some questions worth asking:
-
-- *"In every tightening cycle since 1970, how many months after the Fed Funds Rate peaked did unemployment reach its subsequent high?"*
-- *"What was the average peak-to-trough change in unemployment following rate hike cycles where FEDFUNDS rose by more than 3 percentage points?"*
-- *"Is there any previous cycle where FEDFUNDS rose by more than 4 points and unemployment did not rise by at least 1 point within 24 months?"*
-- *"How does the speed of the 2022-2023 rate hike cycle compare to 1979-1980 in terms of monthly rate of change?"*
-- *"What is the longest consecutive period in the dataset where FEDFUNDS stayed above 5%?"*
-
-The third question is the most pointed. Ask it, and then look at the answer against the current data. The historical record, up to 2022, has a very consistent answer. Whether 2022–2024 is a genuine exception or just a delayed reckoning is a question the data cannot yet fully resolve.
-
-![SCREENSHOT: Analyst chat showing a response to the question about prior tightening cycles, with specific months, rate levels, and unemployment changes cited from the historical data]
+![SCREENSHOT: Correlate view with fedfunds → unrate narrowed to 2022-present, showing a weak or near-zero correlation at lags +12 to +18, a striking departure from the historical pattern visible in the full-sample analysis](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator8.png?raw=true)
 
 ---
+
 
 ## What the Numbers Say (And What They Don't)
 
