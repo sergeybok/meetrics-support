@@ -44,6 +44,8 @@ Open Meetrics, tap **⋯** in the top-right corner of the Feed, and select **Imp
 
 ![SCREENSHOT: CSV import preview showing CPIAUCSL and CPILFESL selected and daten deselected, with a sample of rows showing the index values for both series from the 1940s–50s](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202026-03-27%20at%2021.04.48.png?raw=true)
 
+<img src="https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202026-03-27%20at%2021.04.48.png?raw=true" alt="Description of image" width="300" />
+
 **For the FRED datasets:** each file has exactly two columns — the date and the series value — so nothing needs to be deselected. Repeat the import for both the FEDFUNDS and UNRATE URLs.
 
 ![SCREENSHOT: CSV import preview for FEDFUNDS, showing observation_date recognised as the timestamp and FEDFUNDS as the single tag, with sample values from the 1950s](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202026-03-27%20at%2021.10.43.png?raw=true)
