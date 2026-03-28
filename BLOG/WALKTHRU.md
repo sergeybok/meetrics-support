@@ -1,32 +1,31 @@
-# Monetary Transmission in the Data: Replicating Decades of Macroeconomic Research on Your Phone
+# The Soft Landing That Wasn't Supposed to Happen
 
-Economists have spent fifty years debating exactly how — and how quickly — monetary policy affects inflation. The consensus answer, formalised in models from Friedman and Schwartz (1963) through Christiano, Eichenbaum & Evans (1999), is that interest rate changes propagate through the economy with "long and variable lags," typically peaking in effect after 12 to 18 months. The Phillips Curve — the empirical trade-off between unemployment and inflation first described by A.W. Phillips in 1958 — has been both celebrated and declared dead multiple times since.
+There is a pattern in American economic history so consistent it has the status of a law. The Federal Reserve raises interest rates. A recession follows. Unemployment spikes. The Fed cuts rates. Repeat.
 
-These aren't abstract debates. They directly shaped policy decisions during the most significant inflation episode in four decades, and their predictions were tested in real time between 2021 and 2023.
+It happened after 1969. After 1973. After 1979. After 1989. After 2000. After 2006. In each case, the Fed tightened policy, and somewhere between 12 and 24 months later, the labour market broke. The mechanism varies in its details — sometimes it's housing, sometimes credit markets, sometimes business investment — but the outcome is remarkably consistent. Hiking rates is, historically, how recessions are made.
 
-What follows is a reproducible walkthrough of importing three public macroeconomic time series into Meetrics and using cross-correlation analysis to observe these relationships in the data directly — no statistical software required.
+So when the Fed raised rates eleven times between March 2022 and July 2023 — the most aggressive tightening cycle in forty years — economists made predictions. Some said 2 million jobs lost. Others said 4 million. Almost no mainstream forecast had unemployment staying below 4.5%. The soft landing, the scenario where the Fed successfully cools an overheated economy without triggering a recession, was considered the rarest outcome in macroeconomics. It had essentially happened once in the post-war period, in 1994–1995, and even that is contested.
+
+And yet here we are.
+
+What follows is a walkthrough of importing the raw Fed and unemployment data into Meetrics and seeing that history — and its anomalous recent chapter — with your own eyes.
 
 ---
 
 ## The Data
 
-We'll use three monthly time series drawn from publicly accessible sources with no registration or preprocessing required:
+Two series. That's all you need.
 
 | Series | Description | Source | Coverage |
 |---|---|---|---|
-| `CPIAUCSL` | CPI for All Urban Consumers (headline inflation index) | bdecon/econ_data | Jan 1947 – present |
-| `CPILFESL` | CPI Less Food and Energy (core inflation) | bdecon/econ_data | Jan 1957 – present |
 | `FEDFUNDS` | Effective Federal Funds Rate | FRED / St. Louis Fed | Jul 1954 – present |
 | `UNRATE` | Civilian Unemployment Rate | FRED / St. Louis Fed | Jan 1948 – present |
 
-The CPI series uses 1982–1984 as the base period (index = 100). The FEDFUNDS and UNRATE series are expressed as percentages. All four series are sampled on the first of each month.
+The Fed Funds Rate is the interest rate at which banks lend reserves to each other overnight. It is the primary lever the Federal Reserve pulls to slow or accelerate the economy — when the Fed "raises rates," this is what they're raising. UNRATE is the monthly unemployment rate from the Bureau of Labor Statistics. Together, these two numbers, updated monthly, tell most of the story of American economic management over the past seventy years.
 
 **Import URLs:**
 
 ```
-CPI (headline + core):
-https://raw.githubusercontent.com/bdecon/econ_data/refs/heads/master/micro/cpi.csv
-
 Federal Funds Rate:
 https://fred.stlouisfed.org/graph/fredgraph.csv?id=FEDFUNDS
 
@@ -40,149 +39,151 @@ https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE
 
 Open Meetrics, tap **⋯** in the top-right corner of the Feed, and select **Import from CSV**.
 
-**For the CPI dataset:** paste the first URL and tap **Load**. The preview will show three columns: `CPIAUCSL`, `CPILFESL`, and `daten`. The `daten` column is a redundant human-readable date string (e.g. "01jan1947") — **deselect it** before importing. Keep both CPI columns selected.
+Each FRED file has exactly two columns — the date and the series value. Nothing needs to be deselected. Paste the FEDFUNDS URL, tap **Load**, then **Import**. Repeat for UNRATE.
 
+![SCREENSHOT: CSV import preview for FEDFUNDS, showing observation_date as the timestamp and FEDFUNDS as the single selected tag, with a sample of rows from the 1950s-60s]
 
-<img src="https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202026-03-27%20at%2021.04.48.png?raw=true" alt="Description of image" width="300" />
+After two imports, your Feed will contain both tags. Combined, you have roughly 1,600 monthly observations — every interest rate decision and every unemployment reading since the Eisenhower administration.
 
-**For the FRED datasets:** each file has exactly two columns — the date and the series value — so nothing needs to be deselected. Repeat the import for both the FEDFUNDS and UNRATE URLs.
-
-![SCREENSHOT: CSV import preview for FEDFUNDS, showing observation_date recognised as the timestamp and FEDFUNDS as the single tag, with sample values from the 1950s](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202026-03-27%20at%2021.10.43.png?raw=true)
-
-
-After three imports, your Feed will contain four tags — `cpiaucsl`, `cpilfesl`, `fedfunds`, `unrate` — totalling roughly 3,000 monthly observations spanning more than 75 years of US economic history.
-
-![SCREENSHOT: Feed screen showing recent entries for all four tags with their values and dates, demonstrating the full import was successful]
+![SCREENSHOT: Feed screen showing recent entries for both fedfunds and unrate, with current values visible alongside recent historical readings]
 
 ---
 
-## Step 2 — The Level Series: CPI Over 75 Years
+## Step 2 — The Shape of Economic History
 
-Open the **Analytics** tab and tap `cpiaucsl`. Set the date range to **All**.
+Open the **Analytics** tab. Tap `fedfunds` and set the range to **All**.
 
-The index level itself is not directly interpretable as a percentage — what matters structurally is its trajectory. You'll see three distinct regimes: a modest post-war adjustment in the late 1940s, a sustained acceleration through the 1965–1983 period corresponding to the Great Inflation, and an extended plateau of slow, stable growth from roughly 1983 to 2020 that economists call the Great Moderation. On the far right, the 2021–2023 episode is visible as a near-vertical inflection — the steepest rate of change in the dataset.
+Take a moment with this chart. What you're looking at is a complete record of how aggressively the United States has tried to manage its economy through monetary policy. The shape is not random. There's a 25-year mountain — rates rising through the 1960s and 1970s, peaking at nearly 20% in 1981, then declining almost continuously for four decades until they hit zero in 2008 and stayed there. Then a modest rise, then zero again in 2020, then the sharpest spike since that 1981 peak.
 
-![SCREENSHOT: TagChartView for cpiaucsl showing the full All-range history from ~21 in 1947 to ~300+ in 2024, with the three regime periods visually distinct and the 2021-2023 acceleration clearly visible on the right]
+![SCREENSHOT: TagChartView for fedfunds with All range, showing the full arc from ~1% in the 1950s up to the ~20% peak in 1981, the long downward slope through 2008, the near-zero era, and the sharp 2022-2023 rise]
 
-Enable **Rolling Avg** to suppress the month-to-month sampling noise and make the regime transitions cleaner. Narrow to the **3Y** range to isolate the recent episode: you can see that the index peaked in mid-2022 and decelerated noticeably through 2023, consistent with the announced policy objective.
+Enable **Rolling Avg** to smooth out month-to-month noise. The three-decade downward trend from 1981 to 2021 — what economists sometimes call the "great rate decline" — becomes unmistakable. Every tightening cycle during this period was smaller than the last. The 1984 peak was lower than 1981. The 1989 peak was lower than 1984. And so on. By the time the Fed got to 2006, the "tight" level was 5.25% — a rate that would have been considered accommodative in 1975.
 
-![SCREENSHOT: TagChartView for cpiaucsl with 3Y range and Rolling Avg enabled, showing the peak and subsequent deceleration of the recent inflation episode more clearly]
+Now tap `unrate` and set it to **All**.
 
-Now open `cpilfesl`. Core CPI — which strips out food and energy prices on the grounds that they are supply-shock-driven and mean-reverting — exhibits structurally lower volatility. This is particularly visible in the 1973–1975 and 1979–1981 periods, where the headline series diverged sharply upward from core. The divergence indicates those episodes were substantially driven by oil supply shocks rather than demand-pull or wage-push mechanisms. By contrast, in the 2021–2022 episode, headline and core tracked more closely — consistent with the interpretation that this inflation was more broad-based and demand-driven, not purely an energy price shock.
+![SCREENSHOT: TagChartView for unrate with All range, showing unemployment's historical peaks and valleys — the 10.8% peak in 1982, the 9.9% peak in 2009, and the historic lows of 3.5-3.7% in 2019-2020 and again in 2022-2023]
 
-![SCREENSHOT: TagChartView for cpilfesl with All range, showing the smoother profile compared to headline CPI, especially through the 1970s oil shock period]
-
----
-
-## Step 3 — Cross-Correlation: The Monetary Transmission Lag
-
-The central empirical question: at what lag does the Federal Funds Rate best predict subsequent CPI behaviour?
-
-Navigate to **Correlate**. Set Tag A to `fedfunds`, Tag B to `cpiaucsl`, range to **All**, bucket to **1D**. Because the underlying data is monthly (one observation per month on the first), each lag step in the Correlate view corresponds to one calendar month.
-
-**At lag 0**, you will observe a substantial *positive* correlation — likely in the range of r = 0.55 to 0.70. This is not evidence that raising rates causes inflation. It reflects reverse causality: the Fed raises rates *in response to* rising inflation, so contemporaneous levels are positively correlated by construction. This is the classic omitted-variable / endogeneity problem in raw observational data.
-
-![SCREENSHOT: Correlate view with fedfunds → cpiaucsl at lag 0, showing a strong positive correlation around r = 0.6-0.7, with the correlation card visible below]
-
-**Step the lag forward.** Use the **+** control to move through lags 1 through 14. Watch the correlation coefficient decline and eventually cross zero. Around **lag +9 to +12**, the relationship typically turns negative — meaning higher rates at time *t* are associated with lower CPI approximately 9 to 12 months later. This is the monetary transmission mechanism: the channel through which tighter credit conditions propagate through business investment, consumer borrowing, and aggregate demand to ultimately reduce price pressure.
-
-![SCREENSHOT: Correlate view with lag set to +12, showing the correlation has moved toward zero or negative, with the lag label reading "fedfunds leads cpiaucsl by 12d" — each lag step representing one month of monthly data]
-
-This 9–14 month lag range replicates findings from a substantial body of academic literature. Bernanke & Blinder (1992) identified lags of similar magnitude using vector autoregressions on pre-1990 US data. Romer & Romer (2004) found that output effects peak around 16 months post-shock and inflation effects somewhat later. The fact that a simple cross-correlation on a mobile app reproduces the directional finding of these studies is a useful illustration of how robust the pattern is in the data.
-
-Now narrow the range to **5Y** to isolate the 2022–2023 cycle in isolation. The sign change in the correlation may appear at a somewhat shorter lag in this window, possibly 6 to 9 months — consistent with the relatively rapid deceleration of inflation in 2023 compared to the drawn-out process during the Volcker disinflation of 1981–1983, when lags were longer and the eventual decline in inflation more gradual.
-
-![SCREENSHOT: Correlate view with 5Y range, fedfunds → cpiaucsl, lag around +9, highlighting the pattern specific to the 2022-2023 tightening cycle]
+The unemployment chart looks like a seismograph. The tall spikes are recessions — and if you already have the FEDFUNDS chart memorised, you can start to see the pattern. Every significant spike in unemployment is preceded by a significant rise in the Fed Funds Rate. The 1982 spike to nearly 11% came after rates hit 20%. The 2009 spike to nearly 10% came after rates rose from 1% to 5.25% between 2004 and 2006. The timing isn't coincidental. It's the mechanism.
 
 ---
 
-## Step 4 — The Phillips Curve
+## Step 3 — The Lag: How Long Does the Damage Take?
 
-Phillips (1958) documented an empirical inverse relationship between wage inflation and unemployment in the UK from 1861 to 1957. Samuelson and Solow (1960) extended this to price inflation and formalised it as a policy trade-off: policymakers could, in theory, choose a point on the curve — accepting higher inflation in exchange for lower unemployment, or vice versa.
+The Fed doesn't raise rates and immediately throw people out of work. The economy isn't that responsive. What happens is a chain: higher rates raise borrowing costs, which slow business investment and consumer spending, which reduces demand for labour, which eventually shows up in the unemployment numbers. This takes time.
 
-The relationship was subsequently challenged by Friedman (1968) and Phelps (1968), who argued that it only held in the short run and that attempts to exploit it would shift expectations and eliminate the trade-off. Empirically, the curve appeared to steepen dramatically in the 1970s and to flatten substantially after the 1990s, leading some to declare it effectively dead as a forecasting tool.
+Navigate to **Correlate**. Set Tag A to `fedfunds`, Tag B to `unrate`, range to **All**, bucket to **1D**.
 
-You can see all of this in the data directly.
+At **lag 0**, the correlation will likely be positive — around r = 0.3 to 0.4. This looks paradoxical. Shouldn't higher rates mean higher unemployment? But remember: the Fed also *cuts* rates when unemployment is already high. So in the raw contemporaneous data, high unemployment and high rates appear together (late-cycle tightening), and low unemployment and low rates appear together (accommodative post-crisis policy). The cause and effect are tangled.
 
-Set Tag A to `unrate`, Tag B to `cpiaucsl`, range to **All**.
+![SCREENSHOT: Correlate view with fedfunds → unrate at lag 0, showing a moderate positive correlation around r = 0.3-0.4]
 
-![SCREENSHOT: Correlate view with unrate → cpiaucsl at lag 0, showing a negative correlation — low unemployment associated with higher CPI — reflecting the baseline Phillips Curve relationship]
+Now step the lag forward using the **+** control. This is where it gets interesting.
 
-At lag 0 you should observe a *negative* correlation — low unemployment co-occurs with higher CPI, consistent with the original Phillips hypothesis. The magnitude will be moderate, reflecting the fact that the full-sample correlation averages across three structurally distinct periods.
+As you move through lags 6 through 18, watch the correlation coefficient. It will start declining. Around **lag +12 to +18**, it typically reaches its most negative point — meaning the Fed's rate at time *t* is most strongly associated with unemployment approximately 12 to 18 months later. The sign flip to negative is the key: higher rates today predict *higher* unemployment next year.
 
-Now set the range to **1970–1985** using the custom range. The negative correlation strengthens considerably — this is the era when the trade-off was most apparent in US data, with the Fed repeatedly attempting to manage unemployment at the cost of inflation.
+![SCREENSHOT: Correlate view with fedfunds → unrate at lag around +14, showing the correlation has moved into negative territory, with the lag label reading "fedfunds leads unrate by 14d"]
 
-Switch to the **post-1990 period** and the correlation weakens markedly. During 1995–2019, the US economy ran unemployment as low as 3.5% with inflation persistently *below* the Fed's 2% target — a combination the original Phillips framework would not have predicted. This structural break, often attributed to anchored inflation expectations and global disinflationary pressures from trade integration, is visible without any statistical model: the scatter in the Correlate chart simply flattens.
-
-![SCREENSHOT: Correlate view with unrate → cpiaucsl showing a visibly weaker correlation when the range is narrowed to the post-1990 period, demonstrating the flattening of the Phillips Curve]
-
-**The reverse direction:** set a **negative lag** (Tag A leads negatively, meaning CPI leads unemployment). At around lag −4 to −6, you should observe that rising CPI *precedes* rising unemployment. This is not paradoxical — it captures the policy response channel. High inflation prompts rate hikes, which contract the economy, which raises unemployment. The lag between the inflation shock and the unemployment response reflects the time required for tighter financial conditions to produce job losses. Okun (1962) formalised the related relationship between GDP growth and unemployment; the CPI→unemployment lead seen here is a downstream manifestation of the same mechanism.
-
-![SCREENSHOT: Correlate view with unrate → cpiaucsl at lag -6, showing how CPI changes precede unemployment changes, with the lag label reading "cpiaucsl leads unrate by 6d"]
+Twelve to eighteen months. That's how long it takes for a rate hike to show up as jobs lost. This lag is one of the most consistent empirical findings in monetary economics — it appears in academic research going back to Friedman's 1961 paper on the lag in monetary policy effects, and you're reproducing it from a phone with two public datasets and a cross-correlation function.
 
 ---
 
-## Step 5 — Headline vs Core: Decomposing the Inflation Signal
+## Step 4 — A Tour of Hard Landings
 
-The distinction between headline and core CPI is not merely cosmetic. It reflects a theoretical argument about which price changes carry information about persistent inflationary pressure versus transitory supply disruptions.
+The history of Fed tightening cycles is largely a history of recessions. Let's look at a few.
 
-Set Tag A to `cpilfesl` (core), Tag B to `cpiaucsl` (headline), range **All**, lag 0.
+**The Volcker Shock (1979–1983)**
 
-The correlation will be extremely high — likely r > 0.97 over the full sample. Over most of modern history, food and energy prices have not diverged persistently enough from the overall price level to matter for the level correlation.
+Narrow both the range and context to the early 1980s in Analytics. Paul Volcker became Fed Chair in August 1979 with one mandate: kill inflation, no matter the cost. He raised the Fed Funds Rate to 17.6% by April 1980, briefly cut during a recession, then raised it again to an extraordinary 19.1% in July 1981.
 
-![SCREENSHOT: Correlate view with cpilfesl → cpiaucsl at lag 0, showing a very high correlation around r = 0.97-0.99, with the "Strong positive correlation" label]
+In the Correlate view, isolate **1979–1984** and step through lags on `fedfunds` → `unrate`. The relationship is brutal and clean: unemployment rose from around 6% in 1979 to 10.8% in December 1982 — the highest level since the Great Depression. About 3 million people lost their jobs. Volcker's policy worked — inflation collapsed — but the human cost was enormous and the lag between cause and effect was textbook: roughly 12 to 15 months from the peak in rates to the peak in unemployment.
 
-The more informative analysis is in sub-periods. Narrow to **1972–1982**. The correlation drops measurably — this is where oil-price-driven headline inflation substantially diverged from the underlying core trend. Strip out energy and the 1970s inflation, while still serious, looks structurally different: a combination of demand-pull pressure and wage-price spiralling rather than a pure commodity shock.
+![SCREENSHOT: TagChartView for unrate narrowed to 1979-1984, showing the dramatic rise to 10.8% and the chart for fedfunds on the All view with the 1981 spike clearly visible as the preceding cause]
 
-Now narrow to **2021–2023**. Here the two series track much more closely than in the 1970s, reinforcing the interpretation that the recent episode was a broad demand shock — amplified by supply chain disruptions — rather than a repeat of the oil embargo dynamics. This distinction matters for policy: a supply-shock-driven inflation may self-correct as the shock dissipates, whereas a demand-driven inflation requires active monetary tightening to resolve.
+**The Greenspan Hikes (1994–1995)**
 
----
+This one is the exception that proves the rule. Alan Greenspan raised rates from 3% to 6% in twelve months — a pace that, at the time, seemed aggressive — while the economy was still recovering from the 1990–91 recession. Unemployment was at 6.1% when he started and fell to 5.5% by the time he was done.
 
-## Step 6 — AI-Assisted Pattern Recognition
+Narrow to **1994–1997**. The unemployment rate kept *falling* throughout the tightening cycle. No recession followed. This is the famous soft landing — the one time in the modern era when the Fed raised rates and the labour market shrugged. Economists have debated why ever since. Luck, timing, the unique productivity boom of the early internet era, global disinflationary tailwinds — all have been proposed. The data is silent on the mechanism. It just shows the anomaly.
 
-Switch to the **Analyst** tab. The daily insight cards use the full dataset to surface the most statistically notable observations — you may see a trend card showing the recent trajectory of `fedfunds`, a correlation card identifying the lag relationship between rates and inflation, and an anomaly card flagging the 2021–2022 CPI acceleration as an outlier relative to the preceding two decades.
+![SCREENSHOT: Correlate view with fedfunds → unrate narrowed to 1994-1997, showing a weak or positive correlation — unusually, higher rates did not predict rising unemployment during this cycle]
 
-![SCREENSHOT: Analyst tab showing three Daily Insights cards: a trend card for fedfunds, a correlation card identifying the fedfunds → cpiaucsl lag relationship, and an anomaly card about the 2021-2022 CPI spike]
+**The 2004–2006 Cycle and What Followed**
 
-The chat interface allows free-form queries against the full dataset. Some analytically productive questions:
+Narrow to **2004–2009**. The Fed raised rates seventeen times over two years, from 1% to 5.25%. Unemployment at the time was falling and stayed low through 2007. It seemed, for a while, like another soft landing.
 
-- *"At what Fed Funds Rate level did CPI begin declining in the 1980s tightening cycle, and how does that compare to 2022–2023?"*
-- *"How many months after the Fed Funds Rate peaked in 1981 did CPI reach its subsequent trough?"*
-- *"Compare the rate of CPI deceleration in 2022–2023 to 1980–1982 on a month-over-month basis."*
-- *"Is there a threshold unemployment rate below which CPI has historically tended to accelerate?"*
-- *"What is the cross-correlation between UNRATE and CPIAUCSL at lags 0 through 12 over the 1960–1990 period?"*
+It wasn't. The lag was just longer. The rate hikes had inflated a credit bubble in housing markets — the mechanism was not direct labour market suppression but financial system stress. When the bubble burst, unemployment didn't just rise. It nearly doubled in 18 months, from 4.4% in May 2007 to 9.9% in November 2009. The lag between the tightening and the unemployment damage was unusually long — almost three years — because the channel ran through finance rather than directly through business investment. But it arrived.
 
-These questions probe whether empirical regularities documented in the academic literature are visible in this particular dataset — which itself provides an informal replication check.
-
-![SCREENSHOT: Analyst chat showing a detailed question about comparing the 1980s and 2022 tightening cycles, with the AI response citing specific months, rate levels, and CPI values from the data]
+![SCREENSHOT: TagChartView for unrate narrowed to 2004-2010, showing the deceptively flat unemployment from 2004-2007 followed by the rapid rise to nearly 10% — illustrating how the delayed lag from the 2004-2006 rate hikes eventually materialized]
 
 ---
 
-## What the Data Shows
+## Step 5 — The Anomaly: 2022–2024
 
-A few observations worth noting explicitly:
+Now look at the most recent cycle.
 
-**The transmission lag is consistently positive and in the 9–14 month range.** This holds across the 1970s, 1980s, 1994 tightening, and 2022–2023 cycles. It is one of the more robust empirical regularities in this dataset and consistent with the academic literature.
+Tap `fedfunds` in Analytics. Set to **2Y**. The chart shows eleven rate hikes in sixteen months — from 0.08% in February 2022 to 5.33% by July 2023. In raw speed and magnitude, this is the most aggressive tightening since Volcker. The Fed moved faster than it had in four decades.
 
-**The 2021–2023 episode was the fastest acceleration in the sample but not the highest peak.** The index rose approximately 14% in 18 months — faster than any prior episode in the data. Peak year-on-year inflation of ~9.1% (June 2022) was lower than the ~14.8% recorded in March 1980.
+![SCREENSHOT: TagChartView for fedfunds with 2Y range, showing the near-vertical rise from near zero in early 2022 to above 5% by mid-2023 — the steepest rate of increase visible in the recent portion of the chart]
 
-**The Phillips Curve trade-off was not stable across the full sample.** The inverse relationship is clearly present in the 1960s–1980s data and largely absent in the post-1990 data, consistent with the theoretical predictions of the Friedman-Phelps natural rate hypothesis and subsequent work on expectation anchoring.
+Now tap `unrate` and set to the same **2Y** range.
 
-**Core CPI understated the 1970s shock and tracked headline closely in 2022.** The structural difference between the two episodes is visible directly in the headline-core spread: large in 1973–1975, much smaller in 2021–2023.
+![SCREENSHOT: TagChartView for unrate with 2Y range, showing unemployment staying remarkably flat between approximately 3.4% and 3.9% throughout the 2022-2024 period despite the aggressive rate hikes]
+
+Unemployment barely moved. It started the tightening cycle around 3.8%, dipped to 3.4% at its lowest, and even after the most aggressive rate hike campaign in a generation had fully run its course, remained below 4%. Apply the 12–18 month lag you measured earlier: by late 2023 and into 2024, the unemployment consequences of the 2022 hikes should have been visible. They largely weren't.
+
+Navigate to **Correlate**, set to `fedfunds` → `unrate`, narrow to **2022–present**, and step through lags +6 through +18. The negative correlation that appeared so consistently in prior cycles is weak or absent. Something is different.
+
+![SCREENSHOT: Correlate view with fedfunds → unrate narrowed to 2022-present, showing a weak or near-zero correlation at lags +12 to +18, a striking departure from the historical pattern visible in the full-sample analysis]
 
 ---
 
-## Further Exploration
+## Step 6 — What Did the History Say Should Happen?
 
-FRED publishes hundreds of additional series in the same direct-download format. A few extensions worth exploring with the same approach:
+This is where the AI tools become useful for probing the historical baseline.
 
-- **`PCEPI`** — Personal Consumption Expenditures Price Index, the Fed's formally preferred inflation measure; compare its lag structure to CPIAUCSL
-- **`M2SL`** — M2 money supply; test the monetarist hypothesis that excess money growth leads inflation with a 12–24 month lag
-- **`MORTGAGE30US`** — 30-year fixed mortgage rate; observe how quickly it responds to FEDFUNDS changes and how housing costs affect core CPI
-- **`CPALTT01USM657N`** — CPI year-on-year percentage change from OECD; allows direct percentage-change analysis without computing first differences manually
+Switch to the **Analyst** tab. The daily insights should surface the recent trajectory of `fedfunds` and any anomaly in the `unrate` series relative to historical patterns.
+
+![SCREENSHOT: Analyst tab showing insight cards — a trend card for fedfunds showing the 2022-2023 rise, and a correlation card noting the historical lag relationship between fedfunds and unrate]
+
+The chat interface lets you interrogate the historical record directly. Some questions worth asking:
+
+- *"In every tightening cycle since 1970, how many months after the Fed Funds Rate peaked did unemployment reach its subsequent high?"*
+- *"What was the average peak-to-trough change in unemployment following rate hike cycles where FEDFUNDS rose by more than 3 percentage points?"*
+- *"Is there any previous cycle where FEDFUNDS rose by more than 4 points and unemployment did not rise by at least 1 point within 24 months?"*
+- *"How does the speed of the 2022-2023 rate hike cycle compare to 1979-1980 in terms of monthly rate of change?"*
+- *"What is the longest consecutive period in the dataset where FEDFUNDS stayed above 5%?"*
+
+The third question is the most pointed. Ask it, and then look at the answer against the current data. The historical record, up to 2022, has a very consistent answer. Whether 2022–2024 is a genuine exception or just a delayed reckoning is a question the data cannot yet fully resolve.
+
+![SCREENSHOT: Analyst chat showing a response to the question about prior tightening cycles, with specific months, rate levels, and unemployment changes cited from the historical data]
+
+---
+
+## What the Numbers Say (And What They Don't)
+
+A few things stand out from this analysis.
+
+**The 12–18 month lag is one of the most consistent patterns in the dataset.** Across different Fed Chairs, different economic conditions, different inflation regimes, and different starting levels of unemployment, the cross-correlation between the Fed Funds Rate and subsequent unemployment peaks in roughly the same window. This is not a statistical abstraction — it is the fingerprint of a real mechanism operating through real decisions made by real businesses and consumers in response to credit costs.
+
+**There have been two genuine soft landings in the data, and one contested near-miss.** The 1994–1995 cycle produced no recession. The most recent cycle, by early measures, appears to be the second. Every other significant tightening cycle in the dataset ended in a recession with meaningful unemployment increases. Two out of ten is not a reliable blueprint.
+
+**The post-2008 zero lower bound era is historically unprecedented.** From December 2008 to December 2015, the Fed Funds Rate sat at 0.00–0.25% — the longest period of near-zero rates in the dataset's history. Unemployment gradually fell from 9.9% to 5.0% over those seven years. The recovery was the slowest of any post-war recession. Whether the zero lower bound constrained the Fed's ability to accelerate that recovery, or whether structural factors were responsible, is a question that remains genuinely open.
+
+**The 2022–2023 cycle is the most interesting data point in recent economic history.** Whether it represents a permanent change in how the economy responds to rate hikes — or whether the unemployment effect is simply delayed, or operating through channels not visible in these two series — is the question that macroeconomists are currently arguing about. The data lets you see the anomaly. It does not tell you why.
+
+---
+
+## Try These Extensions
+
+FRED publishes hundreds of additional series in the same direct-download format. A few that would extend this analysis naturally:
+
+- **`NROU`** — The CBO's time-varying estimate of the natural rate of unemployment; compare this to UNRATE to see how close the economy has run to its estimated full-employment level across different eras
+- **`MORTGAGE30US`** — 30-year fixed mortgage rate; observe how directly and quickly it mirrors Fed Funds Rate movements, and whether the 2022–2023 mortgage shock was comparable to prior tightening cycles
+- **`PAYEMS`** — Total nonfarm payroll employment; a more granular look at job creation than UNRATE, and more sensitive to the leading edge of economic slowdowns
+- **`JTSJOL`** — Job openings from the JOLTS survey; a key indicator for the "soft landing" debate, since the 2022–2023 cycle saw job openings fall substantially without unemployment rising — a pattern unlike any prior cycle
 
 Any series available at `https://fred.stlouisfed.org/graph/fredgraph.csv?id=SERIES_ID` can be imported directly. The full FRED catalogue contains over 800,000 time series.
 
 ---
 
-*Data sourced from the Federal Reserve Bank of St. Louis (FRED) and Brian Dew's econ_data repository. Both are freely accessible without registration. Key references: Phillips (1958), Friedman (1968), Bernanke & Blinder (1992), Christiano, Eichenbaum & Evans (1999), Romer & Romer (2004). Screenshots taken on iPhone 17 Pro Max running Meetrics 1.1.*
+*Data sourced from the Federal Reserve Bank of St. Louis (FRED). Freely accessible without registration. Key references: Friedman (1961), Bernanke & Blinder (1992), Romer & Romer (2004). Screenshots taken on iPhone 17 Pro Max running Meetrics 1.1.*
