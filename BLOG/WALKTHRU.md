@@ -55,13 +55,13 @@ Open the **Analytics** tab. Tap `fedfunds` and set the range to **All**.
 
 Take a moment with this chart. What you're looking at is a complete record of how aggressively the United States has tried to manage its economy through monetary policy. The shape is not random. There's a 25-year mountain — rates rising through the 1960s and 1970s, peaking at nearly 20% in 1981, then declining almost continuously for four decades until they hit zero in 2008 and stayed there. Then a modest rise, then zero again in 2020, then the sharpest spike since that 1981 peak.
 
-![SCREENSHOT: TagChartView for fedfunds with All range, showing the full arc from ~1% in the 1950s up to the ~20% peak in 1981, the long downward slope through 2008, the near-zero era, and the sharp 2022-2023 rise]
+![SCREENSHOT: TagChartView for fedfunds with All range, showing the full arc from ~1% in the 1950s up to the ~20% peak in 1981, the long downward slope through 2008, the near-zero era, and the sharp 2022-2023 rise](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator2.png?raw=true)
 
 Enable **Rolling Avg** to smooth out month-to-month noise. The three-decade downward trend from 1981 to 2021 — what economists sometimes call the "great rate decline" — becomes unmistakable. Every tightening cycle during this period was smaller than the last. The 1984 peak was lower than 1981. The 1989 peak was lower than 1984. And so on. By the time the Fed got to 2006, the "tight" level was 5.25% — a rate that would have been considered accommodative in 1975.
 
 Now tap `unrate` and set it to **All**.
 
-![SCREENSHOT: TagChartView for unrate with All range, showing unemployment's historical peaks and valleys — the 10.8% peak in 1982, the 9.9% peak in 2009, and the historic lows of 3.5-3.7% in 2019-2020 and again in 2022-2023]
+![SCREENSHOT: TagChartView for unrate with All range, showing unemployment's historical peaks and valleys — the 10.8% peak in 1982, the 9.9% peak in 2009, and the historic lows of 3.5-3.7% in 2019-2020 and again in 2022-2023](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator3.png?raw=true)
 
 The unemployment chart looks like a seismograph. The tall spikes are recessions — and if you already have the FEDFUNDS chart memorised, you can start to see the pattern. Every significant spike in unemployment is preceded by a significant rise in the Fed Funds Rate. The 1982 spike to nearly 11% came after rates hit 20%. The 2009 spike to nearly 10% came after rates rose from 1% to 5.25% between 2004 and 2006. The timing isn't coincidental. It's the mechanism.
 
