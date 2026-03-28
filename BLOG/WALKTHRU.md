@@ -1,4 +1,4 @@
-# The Soft Landing That Wasn't Supposed to Happen
+# The Soft Landing That Wasn't Supposed to Happen: Replicating decades of Macro-Econ research on your phone
 
 There is a pattern in American economic history so consistent it has the status of a law. The Federal Reserve raises interest rates. A recession follows. Unemployment spikes. The Fed cuts rates. Repeat.
 
