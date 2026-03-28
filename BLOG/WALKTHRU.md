@@ -41,11 +41,11 @@ Open Meetrics, tap **⋯** in the top-right corner of the Feed, and select **Imp
 
 Each FRED file has exactly two columns — the date and the series value. Nothing needs to be deselected. Paste the FEDFUNDS URL, tap **Load**, then **Import**. Repeat for UNRATE.
 
-![SCREENSHOT: CSV import preview for FEDFUNDS, showing observation_date as the timestamp and FEDFUNDS as the single selected tag, with a sample of rows from the 1950s-60s]
+![SCREENSHOT: CSV import preview for FEDFUNDS, showing observation_date as the timestamp and FEDFUNDS as the single selected tag, with a sample of rows from the 1950s-60s](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/IMG_F6F4AA34C056-1.jpeg?raw=true)
 
 After two imports, your Feed will contain both tags. Combined, you have roughly 1,600 monthly observations — every interest rate decision and every unemployment reading since the Eisenhower administration.
 
-![SCREENSHOT: Feed screen showing recent entries for both fedfunds and unrate, with current values visible alongside recent historical readings]
+![SCREENSHOT: Feed screen showing recent entries for both fedfunds and unrate, with current values visible alongside recent historical readings](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202026-03-27%20at%2021.10.43.png?raw=true)
 
 ---
 
