@@ -1,5 +1,7 @@
 # The Soft Landing That Wasn't Supposed to Happen: Replicating decades of Macro-Econ research on your phone
 
+[![Download Meetrics](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/us/app/meetrics/id6760925743)
+
 There is a pattern in American economic history so consistent it has the status of a law. The Federal Reserve raises interest rates. A recession follows. Unemployment spikes. The Fed cuts rates. Repeat.
 
 It happened after 1969. After 1973. After 1979. After 1989. After 2000. After 2006. In each case, the Fed tightened policy, and somewhere between 12 and 24 months later, the labour market broke. The mechanism varies in its details — sometimes it's housing, sometimes credit markets, sometimes business investment — but the outcome is remarkably consistent. Hiking rates is, historically, how recessions are made.

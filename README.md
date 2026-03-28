@@ -4,6 +4,8 @@
 
 For bug reports, feature requests, or general questions, email the address above and I'll get back to you as soon as possible.
 
+[![Download Meetrics](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/us/app/meetrics/id6760925743) 
+
 ---
 
 ## Frequently Asked Questions
