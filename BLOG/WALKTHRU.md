@@ -1,6 +1,6 @@
 # The Soft Landing That Wasn't Supposed to Happen: Replicating decades of Macro-Econ research on your phone
 
-[![Download Meetrics](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/us/app/meetrics/id6760925743)
+*Two CSV imports. Five minutes. Seventy years of economic history on your phone.*
 
 There is a pattern in American economic history so consistent it has the status of a law. The Federal Reserve raises interest rates. A recession follows. Unemployment spikes. The Fed cuts rates. Repeat.
 
@@ -10,7 +10,9 @@ So when the Fed raised rates eleven times between March 2022 and July 2023 — t
 
 And yet here we are.
 
-What follows is a walkthrough of importing the raw Fed and unemployment data into Meetrics and seeing that history — and its anomalous recent chapter — with your own eyes.
+*What follows is a walkthrough of importing the raw Fed and unemployment data into Meetrics and seeing that history — and its anomalous recent chapter — with your own eyes.*
+
+[![Download Meetrics](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/us/app/meetrics/id6760925743)
 
 ---
 
@@ -20,26 +22,16 @@ Two series. That's all you need.
 
 | Series | Description | Source | Coverage |
 |---|---|---|---|
-| `FEDFUNDS` | Effective Federal Funds Rate | FRED / St. Louis Fed | Jul 1954 – present |
-| `UNRATE` | Civilian Unemployment Rate | FRED / St. Louis Fed | Jan 1948 – present |
+| `FEDFUNDS` | Effective Federal Funds Rate | [FRED / St. Louis Fed](https://fred.stlouisfed.org/graph/fredgraph.csv?id=FEDFUNDS) | Jul 1954 – present |
+| `UNRATE` | Civilian Unemployment Rate | [FRED / St. Louis Fed](https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE) | Jan 1948 – present |
 
 The Fed Funds Rate is the interest rate at which banks lend reserves to each other overnight. It is the primary lever the Federal Reserve pulls to slow or accelerate the economy — when the Fed "raises rates," this is what they're raising. UNRATE is the monthly unemployment rate from the Bureau of Labor Statistics. Together, these two numbers, updated monthly, tell most of the story of American economic management over the past seventy years.
-
-**Import URLs:**
-
-```
-Federal Funds Rate:
-https://fred.stlouisfed.org/graph/fredgraph.csv?id=FEDFUNDS
-
-Unemployment Rate:
-https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE
-```
 
 ---
 
 ## Step 1 — Import the Data
 
-Open Meetrics, tap **⋯** in the top-right corner of the Feed, and select **Import from CSV**.
+Open Meetrics, tap **+** in the bottom-right corner of the Feed, and select **Import from CSV** at the bottom of the page.
 
 Each FRED file has exactly two columns — the date and the series value. Nothing needs to be deselected. Paste the FEDFUNDS URL, tap **Load**, then **Import**. Repeat for UNRATE.
 
@@ -79,11 +71,15 @@ At **lag 0**, the correlation is around 0. This looks paradoxical. Shouldn't hig
 
 Now step the lag forward using the **+** control. This is where it gets interesting.
 
-As you move through lags 6 through 18, watch the correlation coefficient. It will start increasing. Around **lag +12 to +18**, it typically reaches its highest point — meaning the Fed's rate at time *t* is most strongly associated with unemployment approximately 12 to 18 months later. Conclusion: higher rates today predict *higher* unemployment next year.
+As you move through lags 6 through 18, watch the correlation coefficient. It will start increasing — a positive correlation means higher rates today are associated with higher unemployment at that future lag. Around **lag +12 to +18**, it typically reaches its highest point — meaning the Fed's rate at time *t* is most strongly associated with unemployment approximately 12 to 18 months later. Conclusion: higher rates today predict *higher* unemployment next year.
 
-![SCREENSHOT: Correlate view with fedfunds → unrate at different lags"](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/combined.png?raw=true)
+![SCREENSHOT: Correlate view with fedfunds → unrate at different lags](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/combined.png?raw=true)
 
 Twelve to eighteen months. That's how long it takes for a rate hike to show up as jobs lost. This lag is one of the most consistent empirical findings in monetary economics — it appears in academic research going back to Friedman's 1961 paper on the lag in monetary policy effects, and you're reproducing it from a phone with two public datasets and a cross-correlation function.
+
+---
+
+> **Try it yourself.** The two CSV imports take about 30 seconds. [Download Meetrics](https://apps.apple.com/us/app/meetrics/id6760925743) and paste the FRED URLs from Step 1 — you'll have 70 years of monetary policy data on your phone before you finish reading this section.
 
 ---
 
@@ -127,9 +123,11 @@ Set to **2022-2024**. The chart shows eleven rate hikes in sixteen months — fr
 
 Unemployment barely moved. It started the tightening cycle around 3.8%, dipped to 3.4% at its lowest, and even after the most aggressive rate hike campaign in a generation had fully run its course, remained below 4%. Apply the 12–18 month lag you measured earlier: by late 2023 and into 2024, the unemployment consequences of the 2022 hikes should have been visible. They largely weren't.
 
-In  the Correlate view set **2022–present** and bucket of **1 Month**, and step through lags +6 through +18. The correlation is quite strong but that is due to low variance in the unemployment rate. If you expand the window to **2021-present** the correlation in the 6 month window disappears.
+In the Correlate view, set **2022–present** and bucket of **1 Month**, and step through lags +6 through +18. The correlation is quite strong but that is due to low variance in the unemployment rate. If you expand the window to **2021-present** the correlation in the 6 month window disappears.
 
 ![SCREENSHOT: Correlate view with fedfunds → unrate narrowed to 2022-present, showing a weak or near-zero correlation at lags +12 to +18, a striking departure from the historical pattern visible in the full-sample analysis](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/Simulator8.png?raw=true)
+
+The next FOMC meeting will set the tone for whether this anomaly holds or unravels. If the Fed begins cutting, you can watch the lag in real time — does unemployment respond faster to cuts than to hikes? Import the data now and check back in 12 months. The answer won't be in anyone's forecast. It'll be in the numbers.
 
 ---
 
@@ -148,17 +146,37 @@ A few things stand out from this analysis.
 
 ---
 
-## Try These Extensions
+## What Else Can You Find?
 
-FRED publishes hundreds of additional series in the same direct-download format. A few that would extend this analysis naturally:
+FRED publishes hundreds of additional series in the same direct-download format. Each one answers a different question about what's happening beneath the surface:
 
-- **`NROU`** — The CBO's time-varying estimate of the natural rate of unemployment; compare this to UNRATE to see how close the economy has run to its estimated full-employment level across different eras
-- **`MORTGAGE30US`** — 30-year fixed mortgage rate; observe how directly and quickly it mirrors Fed Funds Rate movements, and whether the 2022–2023 mortgage shock was comparable to prior tightening cycles
-- **`PAYEMS`** — Total nonfarm payroll employment; a more granular look at job creation than UNRATE, and more sensitive to the leading edge of economic slowdowns
-- **`JTSJOL`** — Job openings from the JOLTS survey; a key indicator for the "soft landing" debate, since the 2022–2023 cycle saw job openings fall substantially without unemployment rising — a pattern unlike any prior cycle
+| Question | Series | Import |
+|----------|--------|--------|
+| Did mortgage rates spike as fast as the Fed rate? | MORTGAGE30US | [Import CSV](https://fred.stlouisfed.org/graph/fredgraph.csv?id=MORTGAGE30US) |
+| Are job openings falling without unemployment rising? | JTSJOL | [Import CSV](https://fred.stlouisfed.org/graph/fredgraph.csv?id=JTSJOL) |
+| How close is the economy to "full employment"? | NROU | [Import CSV](https://fred.stlouisfed.org/graph/fredgraph.csv?id=NROU) |
+| Is job *creation* slowing before unemployment *rises*? | PAYEMS | [Import CSV](https://fred.stlouisfed.org/graph/fredgraph.csv?id=PAYEMS) |
 
 Any series available at `https://fred.stlouisfed.org/graph/fredgraph.csv?id=SERIES_ID` can be imported directly. The full FRED catalogue contains over 800,000 time series.
 
 ---
 
-*Data sourced from the Federal Reserve Bank of St. Louis (FRED). Freely accessible without registration. Key references: Friedman (1961), Bernanke & Blinder (1992), Romer & Romer (2004). Screenshots taken on iPhone 17 Pro Max running Meetrics 1.1.*
+### Import These Series Now
+
+The two datasets in this walkthrough — plus the four extensions above — are all free, public, and import in one tap:
+
+| Series | What You'll See |
+|--------|----------------|
+| FEDFUNDS | 70 years of rate decisions |
+| UNRATE | Every unemployment reading since 1948 |
+| MORTGAGE30US | How fast mortgages track the Fed |
+| PAYEMS | Job creation at the leading edge |
+| JTSJOL | The job-openings puzzle behind the soft landing |
+| NROU | How close to "full employment" the economy runs |
+
+[![Download Meetrics](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/us/app/meetrics/id6760925743)
+
+---
+
+*Data sourced from the Federal Reserve Bank of St. Louis (FRED). Freely accessible without registration. Key references: Friedman (1961), Bernanke & Blinder (1992), Romer & Romer (2004). Screenshots taken in Meetrics 1.1.*
+
