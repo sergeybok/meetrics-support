@@ -23,7 +23,7 @@ In my case, my tags look like this:
 - `bowel_movements` — on account of it being colorectal cancer
 - `water` — water intake, logged daily
 - Plus automatic imports from Apple Health: steps, heart rate, sleep
-=
+
 ![SCREENSHOT: Feed tab with medical logs](https://github.com/sergeybok/meetrics-support/blob/main/RESOURCES/IMG_1452.PNG?raw=true)
 
 That's the Feed tab. Tap +, pick a tag, enter a value, done. It takes about three seconds to log something. Over weeks and months, those three-second entries turn into something genuinely useful. You can also backfill data which I did for the available tp me test data.
