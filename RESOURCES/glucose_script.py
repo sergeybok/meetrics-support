@@ -14,26 +14,32 @@ df["Device Timestamp"] = pd.to_datetime(
     errors="coerce"
 )
 
-# Drop rows where parsing failed or glucose is missing
+# Drop invalid rows
 df = df.dropna(subset=["Device Timestamp", "Historic Glucose mg/dL"])
 
-# Create a date-only column (bucket by day)
+# Bucket by day
 df["date"] = df["Device Timestamp"].dt.date
 
-# Group by date and compute average glucose
-daily_avg = (
+# Group and compute metrics
+daily_stats = (
     df.groupby("date")["Historic Glucose mg/dL"]
-    .mean()
+    .agg(
+        average_glucose="mean",
+        pct_75=lambda x: x.quantile(0.75)
+    )
     .reset_index()
 )
 
-# Rename columns to match desired output
-daily_avg = daily_avg.rename(columns={
+# Rename columns
+daily_stats = daily_stats.rename(columns={
     "date": "Device Timestamp",
-    "Historic Glucose mg/dL": "average_glucose"
+    "pct_75": "75th_pct_glucose"
 })
 
-# Save to CSV
-daily_avg.to_csv(output_csv, index=False)
+# Optional: sort by date
+daily_stats = daily_stats.sort_values("Device Timestamp")
 
-print(f"Saved daily averages to {output_csv}")
+# Save
+daily_stats.to_csv(output_csv, index=False)
+
+print(f"Saved daily stats to {output_csv}")
