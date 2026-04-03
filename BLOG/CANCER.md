@@ -110,6 +110,6 @@ Meetrics is available on the App Store.
 
 If you track anything — health data, habits, grades, finances, workouts, side project metrics — give it a shot. Log a few things for a week, then check the Analytics tab. You might be surprised by what your own data tells you.
 
-I'd love to hear what you end up tracking. And if you have feedback or feature requests, I read every message.
+I'd love to hear what you end up tracking. And if you have feedback or feature requests, I read every email. sergeybokhnyak@icloud.com
 
 
