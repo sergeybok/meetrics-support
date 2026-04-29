@@ -1,11 +1,12 @@
 import pandas as pd
 
 # Input / output paths
-input_csv = "SergiyBokhnyak_glucose_4-3-2026.csv"
+input_csv = "SergiyBokhnyak_glucose_4-29-2026.csv"
 output_csv = "daily_average_glucose.csv"
+insulin_output_csv = "rapid_acting_insulin.csv"
 
-# Read CSV
-df = pd.read_csv(input_csv)
+# Read CSV (row 0 is metadata, row 1 is the real header)
+df = pd.read_csv(input_csv, skiprows=1, low_memory=False)
 
 # Parse datetime
 df["Device Timestamp"] = pd.to_datetime(
@@ -14,15 +15,12 @@ df["Device Timestamp"] = pd.to_datetime(
     errors="coerce"
 )
 
-# Drop invalid rows
-df = df.dropna(subset=["Device Timestamp", "Historic Glucose mg/dL"])
+# --- Daily average glucose ---
+glucose_df = df.dropna(subset=["Device Timestamp", "Historic Glucose mg/dL"]).copy()
+glucose_df["date"] = glucose_df["Device Timestamp"].dt.date
 
-# Bucket by day
-df["date"] = df["Device Timestamp"].dt.date
-
-# Group and compute metrics
 daily_stats = (
-    df.groupby("date")["Historic Glucose mg/dL"]
+    glucose_df.groupby("date")["Historic Glucose mg/dL"]
     .agg(
         average_glucose="mean",
         pct_75=lambda x: x.quantile(0.75)
@@ -30,16 +28,17 @@ daily_stats = (
     .reset_index()
 )
 
-# Rename columns
 daily_stats = daily_stats.rename(columns={
     "date": "Device Timestamp",
     "pct_75": "75th_pct_glucose"
 })
 
-# Optional: sort by date
 daily_stats = daily_stats.sort_values("Device Timestamp")
-
-# Save
 daily_stats.to_csv(output_csv, index=False)
-
 print(f"Saved daily stats to {output_csv}")
+
+# --- Rapid-acting insulin (non-null, with accurate timestamps) ---
+insulin_df = df.dropna(subset=["Device Timestamp", "Rapid-Acting Insulin (units)"]).copy()
+insulin_df = insulin_df[["Device Timestamp", "Rapid-Acting Insulin (units)"]].sort_values("Device Timestamp")
+insulin_df.to_csv(insulin_output_csv, index=False)
+print(f"Saved rapid-acting insulin to {insulin_output_csv}")
